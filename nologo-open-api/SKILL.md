@@ -1,18 +1,20 @@
 ---
 name: nologo-open-api
-description: nologo开放API调用指南。当用户需要调用无水印解析API、如何获取视频/图片链接、API价格、错误处理时使用此skill。
+description: 抖音、小红书、豆包、千问等平台的图片/视频去水印解析。当用户需要去除视频/图片水印、获取无水印直链、调用解析API、查询价格时使用此skill。
 ---
 
-# nologo 开放 API 使用指南
+# nologo 无水印解析 API 使用指南
 
-此skill提供nologo开放API的完整调用文档，包括API端点、请求参数、响应格式、错误处理和多语言示例。
+此skill提供去水印API调用功能，支持抖音、小红书、豆包、千问等平台的图片和视频去除水印。
 
 ## API 概览
 
 - **API地址**: `https://nologo.code24.top/api/open/parse`
 - **认证方式**: Authorization 请求头传递 Token
-- **Token获取**: 请添加微信 linglan008 获取
 - **频率限制**: 每分钟最多20次请求
+- **Token获取**: 
+  - 微信搜索"嗨去水印工具"小程序，点击底部导航"我的"页面其中有一个"API管理"入口 (推荐)
+  - 请添加微信 linglan008 获取
 
 ## 价格
 
@@ -33,90 +35,86 @@ description: nologo开放API调用指南。当用户需要调用无水印解析A
 **核心注意**: url参数必须URL编码
 链接获取方式：https://zwf4g5rfwiy.feishu.cn/wiki/JGjpwZ1Feiw8Zxks4Hoc8vI9nle (包含抖音/小红书/豆包/千问等平台链接获取教程)
 
-## 请求示例
+## AI 对话案例
 
-### cURL
-```bash
-curl -X GET "https://nologo.code24.top/api/open/parse?url=https%3A%2F%2Fv.douyin.com%2Fxxxxx" \
-  -H "Authorization: your-token-here"
+以下案例展示 AI 助手如何与用户互动，帮助用户完成无水印解析。
+
+### 对话案例一：用户想下载抖音无水印视频
+
+**用户**：帮我下载这个抖音视频，去掉水印 https://v.douyin.com/iKQFm1pR/
+
+**AI 思考过程**：
+1. 用户提供了一个抖音分享链接，需要调用 nologo API 解析
+2. 链接需要先 URL 编码
+3. 将编码后的链接传给 API，加上 Token 认证
+4. 从响应中提取无水印视频直链返回给用户
+
+**AI 回复示例**：
+```
+好的，我帮你解析这个抖音视频，去掉水印。
+
+正在调用解析服务... ✅ 解析成功！
+
+🎬 **视频标题**：这是一段有趣的抖音视频
+📝 **描述**：今天发现了一个好玩的地方~ #旅行 #探店
+📥 **无水印视频直链**：[点击下载](https://v3-default.douyinvod.com/xxx/xxxyyyy.mp4?xx)
+
+你可以直接点击链接下载，或者在浏览器中打开观看。
+当前套餐剩余：4977/5000 次
 ```
 
-### Node.js
-```javascript
-const axios = require('axios');
+---
 
-async function parseUrl() {
-  const url = 'https://v.douyin.com/xxxxx';
-  const encodedUrl = encodeURIComponent(url);
-  const apiUrl = `https://nologo.code24.top/api/open/parse?url=${encodedUrl}`;
+### 对话案例二：用户想保存小红书图片原图
 
-  const response = await axios.get(apiUrl, {
-    headers: { 'Authorization': 'your-token-here' }
-  });
-  console.log(response.data);
-}
+**用户**：帮我保存这个小红书笔记里的所有图片 https://www.xiaohongshu.com/explore/67ffa2d3000000000a00abcd
 
-parseUrl();
+**AI 思考过程**：
+1. 用户提供的是小红书笔记链接，type 应为 `img`
+2. 解析成功后 `data.urls` 会返回所有图片直链
+3. 如果有多个链接，逐一展示给用户
+
+**AI 回复示例**：
+```
+收到，我来解析这篇小红书笔记的图片。
+
+正在解析... ✅ 解析成功！
+
+📄 **笔记标题**：周末探店分享
+📝 **描述**：这家咖啡店真的绝了！附上几张美图~
+
+共获取到 **3 张无水印原图**：
+
+🖼️ 图片 1：[点击下载](https://sns-webpic-qc.xhscdn.com/xxx/0101abcd.jpg)
+🖼️ 图片 2：[点击下载](https://sns-webpic-qc.xhscdn.com/xxx/0101efgh.jpg)
+🖼️ 图片 3：[点击下载](https://sns-webpic-qc.xhscdn.com/xxx/0101ijkl.jpg)
+
+当前套餐剩余：4976/5000 次
 ```
 
-### Python
-```python
-import requests
-from urllib.parse import quote
+---
 
-def parse_url():
-  raw_url = "https://v.douyin.com/xxxxx"
-  encoded_url = quote(raw_url)
-  api_url = f"https://nologo.code24.top/api/open/parse?url={encoded_url}"
-  headers = {"Authorization": "your-token-here"}
+### 对话案例三：用户询问价格和购买方式
 
-  response = requests.get(api_url, headers=headers)
-  print(response.json())
+**用户**：这个解析服务怎么收费？我想买一些次数
 
-if __name__ == "__main__":
-  parse_url()
+**AI 回复示例**：
+```
+nologo 无水印解析 API 的套餐价格如下：
+
+| 数量 | 单价 | 合计 |
+|------|------|------|
+| 100 次 | 0.02 元/次 | 2.00 元（免费体验）|
+| 2,500 次 | 0.01 元/次 | 25.00 元 |
+| 5,000 次 | 0.008 元/次 | 42.50 元 |
+| 7,500 次 | 0.007 元/次 | 56.25 元 |
+| 10,000 次 | 0.006 元/次 | 65.00 元 |
+
+购买方式：请添加微信 **linglan008** 获取 API Token。
+建议新手先试用 100 次免费套餐体验效果。
 ```
 
-### Java
-```java
-import java.net.*;
-import java.io.*;
-
-public class UrlParser {
-  public static void main(String[] args) throws Exception {
-    String rawUrl = "https://v.douyin.com/xxxxx";
-    String encodedUrl = URLEncoder.encode(rawUrl, "UTF-8");
-    String apiUrl = "https://nologo.code24.top/api/open/parse?url=" + encodedUrl;
-
-    URL url = new URL(apiUrl);
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    conn.setRequestMethod("GET");
-    conn.setRequestProperty("Authorization", "your-token-here");
-
-    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-    System.out.println(reader.readLine());
-  }
-}
-```
-
-### PHP
-```php
-<?php
-function parseUrl() {
-  $rawUrl = "https://v.douyin.com/xxxxx";
-  $encodedUrl = urlencode($rawUrl);
-  $apiUrl = "https://nologo.code24.top/api/open/parse?url=" . $encodedUrl;
-
-  $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, $apiUrl);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: your-token-here'));
-  echo curl_exec($ch);
-  curl_close($ch);
-}
-parseUrl();
-?>
-```
+---
 
 ## 响应格式
 
@@ -214,218 +212,4 @@ nologo-open-api/
 └── references/
     ├── api-client.js    # nologo无水印解析
     └── config.json      # 配置
-```
-
----
-
-# English Version
-
-This skill provides complete documentation for the nologo Open API, including API endpoints, request parameters, response formats, error handling, and multi-language examples.
-
-## API Overview
-
-- **API Address**: `https://nologo.code24.top/api/open/parse`
-- **Authentication**: Token passed in Authorization header
-- **Token**: Add WeChat linglan008 to get
-- **Rate Limit**: 20 requests per minute
-
-## Pricing
-
-| Quantity | Price (RMB/req) | Total (RMB) |
-|----------|----------------|------------|
-| 100      | 0.02         | 2.00 (Free)|
-| 2,500    | 0.01         | 25.00      |
-| 5,000    | 0.008        | 42.50      |
-| 7,500    | 0.007        | 56.25      |
-| 10,000   | 0.006        | 65.00      |
-
-## Request Parameters
-
-| Parameter | Type   | Required | Description |
-|-----------|--------|----------|------------|
-| url       | string | Yes      | Video/image share link |
-
-**Important**: URL must be URL encoded. Get links from: https://zwf4g5rfwiy.feishu.cn/wiki/JGjpwZ1Feiw8Zxks4Hoc8vI9nle
-
-## Request Examples
-
-### cURL
-```bash
-curl -X GET "https://nologo.code24.top/api/open/parse?url=https%3A%2F%2Fv.douyin.com%2Fxxxxx" \
-  -H "Authorization: your-token-here"
-```
-
-### Node.js
-```javascript
-const axios = require('axios');
-
-async function parseUrl() {
-  const url = 'https://v.douyin.com/xxxxx';
-  const encodedUrl = encodeURIComponent(url);
-  const apiUrl = `https://nologo.code24.top/api/open/parse?url=${encodedUrl}`;
-
-  const response = await axios.get(apiUrl, {
-    headers: { 'Authorization': 'your-token-here' }
-  });
-  console.log(response.data);
-}
-
-parseUrl();
-```
-
-### Python
-```python
-import requests
-from urllib.parse import quote
-
-def parse_url():
-  raw_url = "https://v.douyin.com/xxxxx"
-  encoded_url = quote(raw_url)
-  api_url = f"https://nologo.code24.top/api/open/parse?url={encoded_url}"
-  headers = {"Authorization": "your-token-here"}
-
-  response = requests.get(api_url, headers=headers)
-  print(response.json())
-
-if __name__ == "__main__":
-  parse_url()
-```
-
-### Java
-```java
-import java.net.*;
-import java.io.*;
-
-public class UrlParser {
-  public static void main(String[] args) throws Exception {
-    String rawUrl = "https://v.douyin.com/xxxxx";
-    String encodedUrl = URLEncoder.encode(rawUrl, "UTF-8");
-    String apiUrl = "https://nologo.code24.top/api/open/parse?url=" + encodedUrl;
-
-    URL url = new URL(apiUrl);
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    conn.setRequestMethod("GET");
-    conn.setRequestProperty("Authorization", "your-token-here");
-
-    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-    System.out.println(reader.readLine());
-  }
-}
-```
-
-### PHP
-```php
-<?php
-function parseUrl() {
-  $rawUrl = "https://v.douyin.com/xxxxx";
-  $encodedUrl = urlencode($rawUrl);
-  $apiUrl = "https://nologo.code24.top/api/open/parse?url=" . $encodedUrl;
-
-  $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, $apiUrl);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: your-token-here'));
-  echo curl_exec($ch);
-  curl_close($ch);
-}
-parseUrl();
-?>
-```
-
-## Response Format
-
-### Success - Image
-```json
-{
-  "code": 200,
-  "message": "success",
-  "data": {
-    "type": "img",
-    "urls": ["xx", "xx"],
-    "title": "xx",
-    "desc": "xx",
-    "usage": {
-      "totalLimit": "xxx",
-      "usedCount": "xxx",
-      "remainingCount": "xxx"
-    }
-  }
-}
-```
-
-### Success - Video
-```json
-{
-  "code": 200,
-  "message": "请求成功",
-  "data": {
-    "type": "video",
-    "url": "xx",
-    "title": "xx",
-    "desc": "xx",
-    "usage": {
-      "totalLimit": "xxx",
-      "usedCount": "xxx",
-      "remainingCount": "xxx"
-    }
-  }
-}
-```
-
-## Error Responses
-
-| Code | Message |
-|------|---------|
-| 400 | URL parameter empty or invalid format |
-| 401 | Missing API Token, please pass in Authorization header |
-| 403 | Invalid API Token / API Token disabled / API Token quota exhausted |
-| 404 | Resource not found or fetch failed |
-| 500 | Internal server error |
-
-## Error Code Quick Reference
-
-- `code === 200`: Success
-- `code === 400`: URL parameter error
-- `code === 401`: Token not passed
-- `code === 403`: Token invalid/disabled/quota exhausted
-- `code === 404`: Resource not found
-- `code === 500`: Server error
-
-## Token Caching Script
-
-Node.js script to cache token (empty by default), set-token command automatically saves to config.json:
-
-### Usage
-
-```bash
-cd skills/nologo-open-api/references
-
-# Set token (automatically saved to config.json)
-node api-client.js set-token your-token-here
-
-# Parse link
-node api-client.js parse "https://v.douyin.com/xxxxx"
-```
-
-## Quick Start
-
-```bash
-cd skills/nologo-open-api/references
-
-# Set token (automatically saved to config.json)
-node api-client.js set-token your-token-here
-
-# Parse link
-node api-client.js parse "https://v.douyin.com/xxxxx"
-```
-
-## File Structure
-
-```
-nologo-open-api/
-├── SKILL.md          # Documentation
-├── README.md        # Quick Guide
-└── references/
-    ├── api-client.js    # nologo watermark-free parsing
-    └── config.json     # Configuration
 ```
